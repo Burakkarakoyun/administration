@@ -1,44 +1,69 @@
-package com.school.administration;
+package com.school.administration.controllers;
+import com.school.administration.constants.Constants;
+import com.school.administration.entities.Student;
+import com.school.administration.request.StudentAddRequest;
+import com.school.administration.request.StudentUpdateRequest;
+import com.school.administration.response.HttpResponseMessage;
+import com.school.administration.response.StudentResponse;
+import com.school.administration.service.StudentService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.PostConstruct;
-import java.util.ArrayList;
 import java.util.List;
 
-
+@Slf4j
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/student")
 public class StudentController {
-    private List<Student> studentList = new ArrayList<>();
 
-    @PostConstruct
-    public void init(){
-        studentList.add(new Student(1,"Burak","Karakoyun"));
+    private final StudentService studentService;
+
+    @GetMapping(value = {"/list"})
+    public ResponseEntity<?> getAll(){
+        List<StudentResponse> studentResponses = studentService.listAll();
+
+        HttpResponseMessage message = new HttpResponseMessage.HttpResponseMessageBuilder()
+                .success(true)
+                .items(studentResponses)
+                .build();
+        return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<Student> save(@RequestBody Student student){
+    @PostMapping(value = {"/save"})
+    public ResponseEntity<?> save(@RequestBody StudentAddRequest studentAddRequest){
 
-        studentList.add(student);
-        System.out.println("Öğrenci Başarıyla Eklendi");
-        return ResponseEntity.ok(student);
-    }
-    @PostMapping("/update")
-    public ResponseEntity<Student> update(@RequestBody Student student){
+        StudentResponse studentResponse = studentService.save(studentAddRequest);
 
-        studentList.add(student);
-        System.out.println("Öğrenci Başarıyla Güncellendi!");
-        return ResponseEntity.ok(student);
+        HttpResponseMessage message = new HttpResponseMessage.HttpResponseMessageBuilder()
+                .success(true)
+                .item(studentResponse)
+                .build();
+        return new ResponseEntity<>(message, HttpStatus.OK);
+    }
+    @PutMapping(value = {"/update"})
+    public ResponseEntity<?> update( @RequestBody StudentUpdateRequest studentUpdateRequest){
+
+        StudentResponse studentResponse = studentService.update(studentUpdateRequest);
+
+        HttpResponseMessage message = new HttpResponseMessage.HttpResponseMessageBuilder()
+                .success(true)
+                .item(studentResponse)
+                .build();
+        return new ResponseEntity<>(message, HttpStatus.OK);
+    }
+    @DeleteMapping(value = {"/delete/{id}"})
+    public ResponseEntity<?> delete(@PathVariable("id") int studentId) {
+        studentService.delete(studentId);
+        HttpResponseMessage message = new HttpResponseMessage.HttpResponseMessageBuilder()
+                .success(true)
+                .item(Constants.DELETED_SUCCESS_STATUS)
+                .build();
+        return new ResponseEntity<>(message, HttpStatus.OK);
+
     }
 
-    @GetMapping("/list")
-    public ResponseEntity<List<Student>> listAll(){
-        return ResponseEntity.ok(studentList);
-    }
-
-    @DeleteMapping("/delete/{studentId}")
-    public void delete(@PathVariable int studentId){
-        studentList.remove(studentId);
-    }
 }
