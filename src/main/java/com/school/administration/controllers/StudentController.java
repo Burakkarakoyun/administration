@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @RestController
 @RequestMapping("/student")
@@ -17,23 +17,28 @@ public class StudentController {
         studentList.add(new Student(1,"Burak","Karakoyun"));
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<Student> save(@RequestBody Student student){
+
         studentList.add(student);
         System.out.println("Öğrenci Başarıyla Eklendi");
         return ResponseEntity.ok(student);
     }
+    @PostMapping("/update")
+    public ResponseEntity<Student> update(@RequestBody Student student){
 
-    @GetMapping
+        studentList.add(student);
+        System.out.println("Öğrenci Başarıyla Güncellendi!");
+        return ResponseEntity.ok(student);
+    }
+
+    @GetMapping("/list")
     public ResponseEntity<List<Student>> listAll(){
         return ResponseEntity.ok(studentList);
     }
 
-    @DeleteMapping
-    public ResponseEntity<Student> delete(@RequestBody Student student){
-        studentList.remove(student);
-        return ResponseEntity.ok(student);
-
-        //studentList.stream().filter(s-> s.getId()==studentId)
+    @DeleteMapping("/delete/{studentId}")
+    public void delete(@PathVariable int studentId){
+        studentList.remove(studentId);
     }
 }
