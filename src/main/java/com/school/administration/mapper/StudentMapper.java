@@ -12,5 +12,5 @@ import java.util.List;
 public interface StudentMapper {
     List<StudentResponse> toStudentResponseList (List<Student> students);
     StudentResponse toStudentResponse (Student student);
-    Student toStudent(StudentAddRequest studentAddRequest);
+    Student toStudent (StudentAddRequest studentAddRequest);
 }

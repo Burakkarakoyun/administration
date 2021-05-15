@@ -15,15 +15,14 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Where(clause = "end_date is null")
-@Table(name="student",catalog = "Administration")
+@Table(name = "course",catalog = "Administration")
 
-public class Student {
+public class Course {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-    @Column(name="student_id",nullable = false)
-    private int studentId;
-    private String studentName;
-    private String studentSurname;
-    private double studentEcts;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="course_id",nullable = false)
+    private int courseId;
+    private String courseName;
+    private double ects;
     private LocalDate endDate;
 }

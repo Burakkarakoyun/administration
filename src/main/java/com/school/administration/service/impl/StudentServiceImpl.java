@@ -29,17 +29,17 @@ public class StudentServiceImpl implements StudentService {
     public List<StudentResponse> listAll() {
         List<Student> students = studentRepository.findAll();
         List<StudentResponse> studentResponses = studentMapper.toStudentResponseList(students);
-
         return studentResponses;
     }
     @Override
     public StudentResponse save(StudentAddRequest studentAddRequest) {
+        //validation yap null mu
         Student student = studentMapper.toStudent(studentAddRequest);
         Student saved = studentRepository.save(student);
         return studentMapper.toStudentResponse(saved);
     }
     @Override
-    public StudentResponse update( StudentUpdateRequest studentUpdateRequest) {
+    public StudentResponse update(StudentUpdateRequest studentUpdateRequest) {
         Optional<Student> student = studentRepository.findById(studentUpdateRequest.getStudentId());
         if(student.isPresent()){
             BeanUtils.copyProperties(studentUpdateRequest,student.get());
@@ -47,7 +47,7 @@ public class StudentServiceImpl implements StudentService {
             return  studentMapper.toStudentResponse(savedStudent);
         }
         else {
-            throw new ObjectNotFoundException("Kullanıcı Bulunamadı.");
+            throw new ObjectNotFoundException("Kullanıcı Bulunamadı.");//front-end kısmına çok fazla veri verme trace gönderme 
         }
     }
     @Override
@@ -58,6 +58,5 @@ public class StudentServiceImpl implements StudentService {
             student.get().setEndDate(LocalDate.now());
             studentRepository.save(student.get());
         }
-
     }
 }
