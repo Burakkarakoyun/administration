@@ -47,7 +47,7 @@ public class StudentServiceImpl implements StudentService {
             return  studentMapper.toStudentResponse(savedStudent);
         }
         else {
-            throw new ObjectNotFoundException("Kullanıcı Bulunamadı.");//front-end kısmına çok fazla veri verme trace gönderme 
+            throw new ObjectNotFoundException("Öğrenci Bulunamadı!");//front-end kısmına çok fazla veri verme trace gönderme
         }
     }
     @Override

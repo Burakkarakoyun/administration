@@ -1,6 +1,7 @@
 package com.school.administration.service.impl;
 
 import com.school.administration.entities.Course;
+import com.school.administration.exception.ObjectNotFoundException;
 import com.school.administration.mapper.CourseMapper;
 import com.school.administration.repository.CourseRepository;
 import com.school.administration.request.CourseAddRequest;
@@ -44,6 +45,9 @@ public class CourseServiceImpl implements CourseService {
             BeanUtils.copyProperties(courseUpdateRequest, course.get());
             Course savedCourse = courseRepository.save(course.get());
             return courseMapper.toCourseResponse(savedCourse);
+        }
+        else{
+            throw new ObjectNotFoundException("Kurs Bulunamadı!");
         }
     }
 

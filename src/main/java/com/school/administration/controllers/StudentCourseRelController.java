@@ -1,11 +1,10 @@
 package com.school.administration.controllers;
 import com.school.administration.constants.Constants;
-import com.school.administration.entities.Student;
-import com.school.administration.request.StudentAddRequest;
-import com.school.administration.request.StudentUpdateRequest;
+import com.school.administration.request.StudentCourseRelAddRequest;
+import com.school.administration.request.StudentCourseRelUpdateRequest;
 import com.school.administration.response.HttpResponseMessage;
-import com.school.administration.response.StudentResponse;
-import com.school.administration.service.StudentService;
+import com.school.administration.response.StudentCourseRelResponse;
+import com.school.administration.service.StudenCourseRelService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,47 +14,45 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/student")
-public class StudentController {
-
-    private final StudentService studentService;
+@RequestMapping("/rel")
+public class StudentCourseRelController {
+    private final StudenCourseRelService studentCourseRelService;
 
     @GetMapping(value = {"/list"})
     public ResponseEntity<?> getAll(){
-        List<StudentResponse> studentResponses = studentService.listAll();
-        //log.error("hata mesajı");
+        List<StudentCourseRelResponse> studentCourseRelResponses = studentCourseRelService.listAll();
         HttpResponseMessage message = new HttpResponseMessage.HttpResponseMessageBuilder()
                 .success(true)
-                .items(studentResponses)
+                .items(studentCourseRelResponses)
                 .build();
         return new ResponseEntity<>(message, HttpStatus.OK);
+
     }
 
     @PostMapping(value = {"/save"})
-    public ResponseEntity<?> save(@RequestBody StudentAddRequest studentAddRequest){
-
-        StudentResponse studentResponse = studentService.save(studentAddRequest);
-
+    public ResponseEntity<?> save(@RequestBody StudentCourseRelAddRequest studentCourseRelAddRequest){
+        StudentCourseRelResponse studentCourseRelResponse = studentCourseRelService.save(studentCourseRelAddRequest);
         HttpResponseMessage message = new HttpResponseMessage.HttpResponseMessageBuilder()
                 .success(true)
-                .item(studentResponse)
+                .item(studentCourseRelResponse)
                 .build();
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
+
     @PutMapping(value = {"/update"})
-    public ResponseEntity<?> update( @RequestBody StudentUpdateRequest studentUpdateRequest){
-
-        StudentResponse studentResponse = studentService.update(studentUpdateRequest);
-
+    public ResponseEntity<?> update(@RequestBody StudentCourseRelUpdateRequest studentCourseRelUpdateRequest){
+        StudentCourseRelResponse studentCourseRelResponse = studentCourseRelService.update(studentCourseRelUpdateRequest);
         HttpResponseMessage message = new HttpResponseMessage.HttpResponseMessageBuilder()
                 .success(true)
-                .item(studentResponse)
+                .item(studentCourseRelResponse)
                 .build();
         return new ResponseEntity<>(message, HttpStatus.OK);
+
     }
+
     @DeleteMapping(value = {"/delete/{id}"})
-    public ResponseEntity<?> delete(@PathVariable("id") int studentId) {
-        studentService.delete(studentId);
+    public ResponseEntity<?> delete(@PathVariable("id") int studentCourseRelId){
+        studentCourseRelService.delete(studentCourseRelId);
         HttpResponseMessage message = new HttpResponseMessage.HttpResponseMessageBuilder()
                 .success(true)
                 .item(Constants.DELETED_SUCCESS_STATUS)
