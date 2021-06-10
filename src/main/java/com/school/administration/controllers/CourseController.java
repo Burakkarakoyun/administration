@@ -39,6 +39,7 @@ public class CourseController {
                 .item(courseResponse)
                 .build();
         return new ResponseEntity<>(message, HttpStatus.OK);
+
     }
 
     @PutMapping(value = "/update")
